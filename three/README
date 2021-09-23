@@ -1,0 +1,61 @@
+
+Please answer the following questions to explain your implementation (Directly write your answer below the questions).
+
+
+
+1. Which are the critical regions need to be protected for mutula exclusion? Why are they? 
+
+There are 2 critical regions that need to be protected for mutula excluesion. The first critical region is when an item is removed from the buffer within t
+he remove_item function. 
+The next critical region is when an item is added to the buffer within the insert_item function. This is because we want only one thread or one operation to 
+be conducted at one time to prevent the occurence of stale or invalid data. Take for example if there are two seperate operation happening at the same time,
+both are adding an item to the buffer. When the first operation ends the buffer will be incremented by one and if the other opereation is happening at the same
+time they will end up with different counts. This data conflict is not good and that is why to keep the integrity of the data we use mutex locks to prevent
+such scenarios from happening.
+
+
+
+
+
+
+2. There are 7 requirements your program should achieve: 
+
+1)	When a producer thread inserts a new item into the buffer, a message should be print to screen showing which thread (with ID) insert which item (with value) to which buffer slot (with next_in)
+2)	When a consumer thread removes a new item from the buffer, a message should be print to screen showing which thread (with ID) remove which item (with value) from which buffer slot (with next_out)
+3)	Producers must block if the buffer is full,
+4)	Consumers must block if the buffer is empty,
+5)	No two/more producers insert items to the same buffer slot,
+6)	No two/more consumers remove the items from the same buffer slot,
+7)	The messages must be printed in the order showing the real execution scenarios.
+
+Please explain how they are satisfied in your design (you need to explain one by one!)
+1. The program shows the message of which thread (with ID) insert which item (with value) everytime it is run. This is done by simply putting a print statement
+within the insert_item function with id and item as a variable within the print statement. This statement will be printed out as the insert_item function is called
+by the producer thread.
+2. The program shows the message of which thread (with ID) remove which item (with value) everytime its is run. This is done by simply putting a print statement
+within the remove_item function with id and item as a variable within the print statement. This statement will be printed out as the remove_item function is called
+by the consumer thread.
+3. The Producer will block if the buffer is full. This is done via 2 semaphores which I define as vacantBuffer and occupiedBuffer. In this case we check vacantBuffer
+if there is no more space in vacantBuffer, then the buffer is full and producer will block. We then post occupiedBuffer to update the data on how many buffer spaces
+are occupied.
+4. The Consumer will block if the buffer is empty. This is done via 2 semaphores which I define as vacantBuffer and occupiedBuffer. In this case we check occupiedBuffer
+if occupiedBuffer is empty, then the buffer is empty and consumer will block. We then post vacantBuffer to update the data on how many buffer spaces
+are vacant.
+5. This is prevented by using mutex lock so that only one operation could be done concurrently, therefore there will not be any collision.
+6. This is prevented by using mutex lock so that only one operation could be done concurrently, therefore there will not be any collision.
+7. The messages are printed in the real execution scenarios as they will only be printed when their respective function actually executes the operation.
+
+
+
+
+
+
+
+
+3) Why you think your design is the most effective one? Is there any other design also works but less effective? 
+I think that this design is the most effective one because if not we will be using a lot of if statements and loops which unecessarily increases the complexity
+of the program. By using semaphores we can keep track of the buffer without using unecessary loops.
+
+
+
+

@@ -1,0 +1,12 @@
+Code by: Jason Gumarjadi Sunardi
+cssc4363
+
+I was asked to implement a Page Replacement algorithm using FIFO and LRU methodology. In my FIFO implementation I have a function tha loops through the entire 
+Page Frame array to find if there is an element that matches the element that we are inserting into the page frame if the element is not found we will insert it 
+the index which is defined by memory.nextToReplaced % FrameNR, setting the page to the correct frame
+ and since that qualifies as a page fault which we will increment and we will also increment the nextToReplaced variable.
+
+In the LRU implementation I have a function which is used to defines the least used slot. This is used in conjunction with an array of clock which keeps track 
+of which accessed and when. Then we used the previous function that loops through the entire array to know if there is a matching element. If not it constitute as a 
+page fault and we increment the page fault counter and then insert the element in the least used slot in the page frame.
+ 
